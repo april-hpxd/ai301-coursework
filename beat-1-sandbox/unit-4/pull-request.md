@@ -15,45 +15,39 @@ label is not graded.
 
 **Pull request**
 
-[Link to the pull request you opened. It must be the pull request's own page on the Path
-Review repo, not your fork's branch page.]
+Not opened in this session; this branch was validated locally and left ready for review, but no GitHub PR was published without explicit approval.
 
 **Branch**
 
-[The name of the branch the pull request comes from, exactly as it appears in your fork.
-The naming shape is a type prefix, then the issue number, then a short description. **The
-issue number in the branch name must be the number of the issue the pull request fixes** —
-a name carrying any other number does not satisfy this field.]
+`fix/64-partial-overlap-fixture`
 
 ## Eval iterations
 
-Answer all four sections. Quote source text directly; paraphrase does not satisfy these
-fields.
-
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+1. `python run_eval.py --skill C:\Users\rusla\.claude\skills\pr-precheck --save-run eval-run.txt` -> agreement `18/20` scored items (`PASS`). This was the only full run and it matches the agreement line in `beat-1-sandbox/unit-4/eval-run.txt`.
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+I picked `pkg-05`.
+
+- Our rubric: `reject`
+- Gold label: `accept`
+- Why: the package is a strong `clear-accept` candidate on file scope and plan match, but the rubric rejects it on the `Test evidence is decisive` check because the evidence did not include an actual before/after transcript for the named trigger. The package looked good at a glance but the evidence did not prove the fix from the issue's reproduction path.
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/pr-precheck/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+Quote from the final uploaded rubric at `tools/pr-precheck/rubric.md`:
+
+```text
+| Test evidence is decisive | The test-evidence section (live: `test_evidence.md`) read against the plan's test plan and the original repro steps in the plan-context. See evidence-guide.md, Test evidence. | For each failure mode or repro step the plan named as in-scope verification, the evidence shows an observable before/after (or after plus a named before from the package) of that actual trigger — command and output, not "tests pass" or "verified on my machine". Evidence that only exercises a control/unchanged path fails. If the plan named several in-scope modes and the evidence is silent on one with no disclosed deferral, fail. A plan-noted deferral whose remaining in-scope repro is shown can pass. | required |
+```
+
+I kept this rule as written because the whole point of the course assignment is to prevent package-level judgments from being driven by a polished description alone. The rubric has to require an observed command-and-output reproduction, not just a plausible or narratively convincing claim.
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+I kept the strict `Test evidence is decisive` rule even though it rejected two otherwise strong `clear-accept` packages (`pkg-05` and `pkg-19`). That was the cost of preventing narrative-only evidence from passing automatically. I explicitly re-checked those packages against the rubric and accepted the trade-off because the evaluation objective is to reward observable proof, not polish.
 
 ---
 
